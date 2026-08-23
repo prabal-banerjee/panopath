@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0d0c" />
+  <meta name="description" content="Convert a 360° panorama photo to a smooth video in your browser. Add pan, tilt, zoom and timed camera waypoints, then export up to 4K at 60 fps." />
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PanoPath" />
+  <meta property="og:title" content="360 Photo to Video Converter with Camera Waypoints" />
+  <meta property="og:description" content="Create smooth pan, tilt and zoom videos from equirectangular 360° photos. Private, browser-based and free to use." />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="PanoPath — 360 Photo to Video Converter" />
+  <meta name="twitter:description" content="Animate a 360° photo with precise camera waypoints and frame-locked video export." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <title>360 Photo to Video Converter with Waypoints — PanoPath</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PanoPath",
+    "alternateName": "PanoPath 360 Photo Motion Studio",
+    "description": "A private in-browser editor that converts equirectangular 360 degree photos into smooth conventional videos using timed pan, tilt, zoom and camera waypoints.",
+    "applicationCategory": "MultimediaApplication",
+    "applicationSubCategory": "Video editor",
+    "operatingSystem": "Any operating system with a modern web browser",
+    "browserRequirements": "Requires JavaScript and WebGL 2. WebCodecs is recommended for frame-locked export.",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "360 photo to video conversion",
+      "Pan, tilt and zoom camera waypoints",
+      "Frame-locked VP9 WebM export",
+      "Up to 4K resolution and 60 frames per second",
+      "Local browser processing without photo uploads",
+      "16:9, 9:16 and 1:1 output"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How do I convert a 360 photo to a video?", "acceptedAnswer": { "@type": "Answer", "text": "Choose a 2:1 equirectangular panorama, frame the opening view, add camera waypoints for each pan, tilt or zoom, preview the motion path, and export the result as a WebM video." } },
+      { "@type": "Question", "name": "Does PanoPath upload my 360 photo?", "acceptedAnswer": { "@type": "Answer", "text": "No. The panorama is decoded, rendered and encoded locally by your web browser. It is not uploaded to a server." } },
+      { "@type": "Question", "name": "Why is the exported camera motion smooth?", "acceptedAnswer": { "@type": "Answer", "text": "On browsers with WebCodecs, every output frame is rendered at its exact timeline position before encoding. Slow hardware can increase export time without changing the camera timing." } },
+      { "@type": "Question", "name": "What 360 photo format works best?", "acceptedAnswer": { "@type": "Answer", "text": "A 2:1 equirectangular JPG, PNG or WebP works best. Use a 4096 by 2048 source for HD output and an 8K source when reframing to a sharp 4K video." } }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="PanoPath home">
+      <span class="brand-mark" aria-hidden="true"><span></span></span>
+      <span>PanoPath</span>
+    </a>
+    <div class="topbar-center">
+      <span class="project-name">Untitled panorama</span>
+      <span class="saved"><i></i> Local only</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="button ghost small" id="newProjectButton" type="button">New</button>
+      <button class="button primary small" id="exportTopButton" type="button" disabled>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
+        Export video
+      </button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="workspace" aria-label="Panorama preview">
+      <div class="viewer" id="viewer">
+        <canvas id="glCanvas"></canvas>
+
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M8 15h32v21H8zM8 29l8-8 8 8 5-5 11 11M31 19h.01"/></svg>
+          </div>
+          <p class="eyebrow">360 PHOTO TO VIDEO</p>
+          <h1>Turn a still world<br/>into a camera move.</h1>
+          <p class="empty-copy">Drop in an equirectangular panorama. Frame your shots, add waypoints, and export a smooth video—without uploading a pixel.</p>
+          <div class="upload-actions">
+            <button class="button primary large" id="chooseButton" type="button">Choose 360 photo</button>
+            <button class="button secondary large" id="demoButton" type="button">Try the demo</button>
+          </div>
+          <p class="format-hint">JPG, PNG or WebP · 2:1 recommended · processed on this device</p>
+        </div>
+
+        <div class="drop-overlay" id="dropOverlay">
+          <div><strong>Drop your panorama</strong><span>Nothing will be uploaded</span></div>
+        </div>
+
+        <div class="viewer-hud hidden" id="viewerHud">
+          <div class="viewer-badge"><span class="pulse-dot"></span><span id="resolutionBadge">PANORAMA</span></div>
+          <div class="frame-readout"><span id="yawReadout">0°</span><span id="pitchReadout">0°</span><span id="fovReadout">75° FOV</span></div>
+          <div class="viewer-help">Drag to look · Scroll to zoom · Double-click to add a waypoint</div>
+          <div class="viewer-actions">
+            <button class="icon-button" id="resetViewButton" type="button" aria-label="Reset view" title="Reset view">
+              <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.7L4 8.6M4 4v4.6h4.6"/></svg>
+            </button>
+            <button class="icon-button" id="fullscreenButton" type="button" aria-label="Fullscreen" title="Fullscreen">
+              <svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M8 21H3v-5m13 5h5v-5"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="transport disabled" id="transport">
+        <div class="transport-controls">
+          <button class="transport-button" id="jumpStartButton" type="button" aria-label="Jump to start"><svg viewBox="0 0 24 24"><path d="M6 5v14M18 6l-8 6 8 6z"/></svg></button>
+          <button class="play-button" id="playButton" type="button" aria-label="Play"><svg class="play-icon" viewBox="0 0 24 24"><path d="m9 6 9 6-9 6z"/></svg><svg class="pause-icon" viewBox="0 0 24 24"><path d="M9 6v12m6-12v12"/></svg></button>
+          <div class="timecode"><span id="currentTime">00:00.0</span><em>/</em><span id="totalTime">00:08.0</span></div>
+        </div>
+        <div class="timeline-wrap">
+          <div class="timeline-ruler" aria-hidden="true"><span>0s</span><span>2s</span><span>4s</span><span>6s</span><span>8s</span></div>
+          <div class="timeline" id="timeline">
+            <div class="timeline-fill" id="timelineFill"></div>
+            <div class="waypoint-markers" id="waypointMarkers"></div>
+            <input id="scrubber" type="range" min="0" max="8" value="0" step="0.001" aria-label="Timeline position" />
+          </div>
+        </div>
+        <button class="zoom-fit" id="fitButton" type="button" title="Fit timeline"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M8 21H3v-5m13 5h5v-5"/></svg></button>
+      </div>
+    </section>
+
+    <aside class="inspector" aria-label="Motion editor">
+      <div class="panel-heading">
+        <div><p class="eyebrow">CAMERA PATH</p><h2>Waypoints</h2></div>
+        <button class="icon-button light" id="addWaypointButton" type="button" aria-label="Add waypoint" title="Capture current view" disabled>
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+      <p class="panel-intro">Position the view, then capture a waypoint. The camera glides between them.</p>
+
+      <div class="waypoint-list" id="waypointList">
+        <div class="waypoint-placeholder"><span>01</span><div><strong>Your first frame</strong><p>Load a photo to begin</p></div></div>
+        <div class="waypoint-placeholder muted"><span>02</span><div><strong>Next view</strong><p>Pan, tilt, or zoom</p></div></div>
+      </div>
+
+      <div class="motion-settings">
+        <div class="section-label"><span>MOTION</span><button class="text-button" id="reverseButton" type="button" disabled>Reverse path</button></div>
+        <label class="field-row" for="durationInput">
+          <span><strong>Duration</strong><small>Length of the final clip</small></span>
+          <span class="number-field"><input id="durationInput" type="number" min="2" max="60" step="0.5" value="8" disabled/><em>sec</em></span>
+        </label>
+        <label class="field-row" for="globalEase">
+          <span><strong>Default easing</strong><small>Used by new waypoints</small></span>
+          <select id="globalEase" disabled>
+            <option value="smooth">Smooth</option>
+            <option value="linear">Linear</option>
+            <option value="easeInOut">Cinematic</option>
+            <option value="hold">Hold, then move</option>
+          </select>
+        </label>
+        <label class="toggle-row">
+          <span><strong>Motion blur</strong><small>Sub-frame sampling during export</small></span>
+          <input id="motionBlurToggle" type="checkbox" disabled/><i></i>
+        </label>
+      </div>
+
+      <div class="export-settings">
+        <div class="section-label"><span>EXPORT</span><span class="quality-pill">FRAME-LOCKED</span></div>
+        <div class="segmented" id="aspectControl" aria-label="Aspect ratio">
+          <button type="button" data-aspect="16:9" class="active" disabled>16:9</button>
+          <button type="button" data-aspect="9:16" disabled>9:16</button>
+          <button type="button" data-aspect="1:1" disabled>1:1</button>
+        </div>
+        <div class="export-grid">
+          <label>Resolution<select id="resolutionSelect" disabled><option value="1080">1080p</option><option value="1440">1440p</option><option value="2160">4K</option></select></label>
+          <label>Frame rate<select id="fpsSelect" disabled><option value="30">30 fps</option><option value="60" selected>60 fps</option></select></label>
+        </div>
+        <button class="button primary export-button" id="exportButton" type="button" disabled>
+          <span>Export video</span><small id="exportEstimate">WebM · quality encode</small>
+        </button>
+        <p class="privacy-note"><svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2m-11 0h12v10H6z"/></svg>Your photo stays in this browser.</p>
+      </div>
+    </aside>
+  </main>
+
+  <section class="seo-content" aria-labelledby="about-title">
+    <div class="seo-lead">
+      <p class="eyebrow">FREE 360 PHOTO ANIMATOR</p>
+      <h2 id="about-title">A camera path through a still panorama.</h2>
+      <p>PanoPath converts a 2:1 equirectangular 360° photo into a regular, shareable video. Instead of accepting a fixed automatic spin, you choose exactly where the camera looks, when it moves and how closely it zooms.</p>
+    </div>
+    <div class="answer-grid">
+      <article><span>01</span><h3>Load a 360° photo</h3><p>Choose a JPG, PNG or WebP panorama. The file stays on your device and is rendered with WebGL.</p></article>
+      <article><span>02</span><h3>Add camera waypoints</h3><p>Drag to pan and tilt, scroll to zoom, then capture timed views along the video timeline.</p></article>
+      <article><span>03</span><h3>Preview the movement</h3><p>Use smooth, linear, cinematic or hold easing to control the motion between each view.</p></article>
+      <article><span>04</span><h3>Export a smooth video</h3><p>Render a frame-locked VP9 WebM in landscape, portrait or square format at up to 4K and 60 fps.</p></article>
+    </div>
+    <div class="feature-band">
+      <div><strong>Private by design</strong><p>No account, cloud render or photo upload.</p></div>
+      <div><strong>Waypoint control</strong><p>Animate pan, tilt, field of view and timing.</p></div>
+      <div><strong>Frame-locked export</strong><p>Timeline positions remain exact on slow hardware.</p></div>
+    </div>
+    <div class="faq" aria-labelledby="faq-title">
+      <p class="eyebrow">COMMON QUESTIONS</p>
+      <h2 id="faq-title">360 photo to video FAQ</h2>
+      <details><summary>How do I convert a 360 photo to a video?</summary><p>Choose a 2:1 equirectangular panorama, frame the opening view, add camera waypoints for each pan, tilt or zoom, preview the path, and export the result as a WebM video.</p></details>
+      <details><summary>Does PanoPath upload my panorama?</summary><p>No. Decoding, WebGL rendering and video encoding happen locally in your browser. Closing the page discards the photo.</p></details>
+      <details><summary>How does PanoPath prevent stuttering?</summary><p>In browsers with WebCodecs, each output frame is rendered at its exact timeline position. The export may take longer on slower hardware, but the intended camera timing does not change.</p></details>
+      <details><summary>What image resolution should I use?</summary><p>A 4096×2048 panorama is a good source for HD output. For a sharp 4K reframed video, use an 8K equirectangular source because the virtual camera sees only part of the sphere at once.</p></details>
+      <details><summary>Which browsers provide the best export?</summary><p>Current Chrome and Edge releases provide the preferred frame-locked WebCodecs path. Other browsers use a real-time compatibility encoder when available.</p></details>
+    </div>
+  </section>
+
+  <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" hidden />
+
+  <dialog id="exportDialog" class="export-dialog">
+    <div class="dialog-head"><div><p class="eyebrow">RENDER QUEUE</p><h2 id="exportDialogTitle">Rendering your path</h2></div><button class="icon-button light" id="closeDialogButton" type="button" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="render-preview"><canvas id="exportPreview"></canvas><div class="render-scan"></div><span id="renderFrameLabel">Preparing encoder…</span></div>
+    <div class="progress-track"><div id="exportProgress"></div></div>
+    <div class="render-stats"><span id="exportPercent">0%</span><span id="exportStatus">Checking browser encoder</span></div>
+    <p class="render-note" id="renderNote">Every frame is rendered at its exact timeline position, so playback stays smooth even if encoding takes longer.</p>
+    <div class="dialog-actions">
+      <button class="button secondary" id="cancelExportButton" type="button">Cancel</button>
+      <a class="button primary hidden" id="downloadButton" download="panopath-video.webm">Download video</a>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="noscript">PanoPath needs JavaScript to render and encode your 360° photo locally.</p></noscript>
+  <script src="app.js"></script>
+</body>
+</html>

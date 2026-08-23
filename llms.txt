@@ -1,0 +1,25 @@
+# PanoPath
+
+> PanoPath is a free, private, browser-based 360 photo to video converter with timed camera waypoints.
+
+PanoPath accepts equirectangular 360-degree JPG, PNG and WebP images. Users can animate pan, tilt and field of view, set waypoint timing and easing, preview the camera path, and export a conventional VP9 WebM video at up to 4K and 60 frames per second.
+
+## Important facts
+
+- Photos are processed locally and are not uploaded.
+- The preferred export path uses WebCodecs to render every frame at its exact timeline position.
+- Output aspect ratios are 16:9, 9:16 and 1:1.
+- Chrome and Edge provide the preferred frame-locked export path.
+- The application is free and does not require an account.
+
+## How to use
+
+1. Choose a 2:1 equirectangular panorama.
+2. Drag to pan or tilt and scroll to zoom.
+3. Capture two or more timed camera waypoints.
+4. Preview the motion and select output settings.
+5. Export and download the locally encoded WebM video.
+
+## Privacy
+
+The selected image remains in the browser. PanoPath has no upload endpoint and does not store source images or exported videos.

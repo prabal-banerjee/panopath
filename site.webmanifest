@@ -1,0 +1,10 @@
+{
+  "name": "PanoPath — 360 Photo Motion Studio",
+  "short_name": "PanoPath",
+  "description": "Convert 360 photos into smooth videos with camera waypoints.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090b0a",
+  "theme_color": "#0b0d0c",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
