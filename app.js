@@ -210,7 +210,7 @@
     elements.newProject.onclick=()=>location.reload(); elements.export.onclick=startExport;elements.exportTop.onclick=startExport;
     elements.closeDialog.onclick=closeExportDialog;elements.cancelExport.onclick=()=>{state.cancelExport=true;if(!state.exporting)closeExportDialog();};
     elements.resolution.onchange=updateEstimate;elements.fps.onchange=updateEstimate;elements.blur.onchange=updateEstimate;
-    $$('#aspectControl button').forEach(b=>b.onclick=()=>{$$('#aspectControl button').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.aspect=b.dataset.aspect;updateEstimate();});
+    $$('#aspectControl button').forEach(b=>b.onclick=()=>{$$('#aspectControl button').forEach(x=>{const active=x===b;x.classList.toggle('active',active);x.setAttribute('aria-pressed',String(active));});state.aspect=b.dataset.aspect;updateEstimate();});
     window.addEventListener('resize',()=>{if(state.loaded&&!state.exporting){renderer.resizeToDisplay();renderer.render(state.view);}});
   }
 

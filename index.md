@@ -30,6 +30,8 @@ PanoPath does not generate a 360-degree environment from a normal photograph, ed
 4. Capture two or more camera waypoints and set their times.
 5. Preview the movement, choose output dimensions and export.
 
+Choose **16:9 Landscape** for widescreen, **9:16 Portrait** for vertical social video, or **1:1 Square** for square output. At 1080p, these export as 1920×1080, 1080×1920, and 1080×1080 respectively.
+
 ### Changing rotation direction
 
 To make the camera travel the opposite way between waypoint A and waypoint B, select destination waypoint B and change its **Pan** value by one full turn. Subtract 360 degrees to force one direction or add 360 degrees to force the other. For example, `90°` and `-270°` end at the same visual direction but take opposite rotational paths. **Reverse path** instead swaps the complete waypoint sequence.

@@ -145,7 +145,9 @@ select { height: 31px; border: 1px solid #343a35; border-radius: 6px; color: #c9
 .toggle-row input:checked + i::after { transform: translateX(16px); background: #172006; }
 .quality-pill { color: var(--lime); border: 1px solid rgba(200,240,90,.3); background: rgba(200,240,90,.06); padding: 4px 6px; border-radius: 4px; font-size: 7px; letter-spacing: .1em; }
 .segmented { display: grid; grid-template-columns: repeat(3, 1fr); padding: 3px; background: #0e110f; border: 1px solid #2c322d; border-radius: 7px; }
-.segmented button { height: 29px; border: 0; border-radius: 4px; background: transparent; color: #747c75; font-size: 9px; cursor: pointer; }
+.segmented button { min-height: 39px; border: 0; border-radius: 4px; background: transparent; color: #747c75; font-size: 9px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+.segmented button strong { color: inherit; font-size: 10px; }
+.segmented button small { color: inherit; font-size: 7px; }
 .segmented button.active { color: #dbe1dc; background: #252b26; box-shadow: 0 1px 3px #000; }
 .export-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 11px 0; }
 .export-grid label { display: flex; flex-direction: column; gap: 6px; color: #707871; font-size: 8px; text-transform: uppercase; letter-spacing: .09em; }

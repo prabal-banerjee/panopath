@@ -80,6 +80,7 @@
       { "@type": "Question", "name": "Does PanoPath upload my 360 photo?", "acceptedAnswer": { "@type": "Answer", "text": "No. The panorama is decoded, rendered and encoded locally by your web browser. It is not uploaded to a server." } },
       { "@type": "Question", "name": "Why is the exported camera motion smooth?", "acceptedAnswer": { "@type": "Answer", "text": "On browsers with WebCodecs, every output frame is rendered at its exact timeline position before encoding. Slow hardware can increase export time without changing the camera timing." } },
       { "@type": "Question", "name": "What 360 photo format works best?", "acceptedAnswer": { "@type": "Answer", "text": "A 2:1 equirectangular JPG, PNG or WebP works best. Use a 4096 by 2048 source for HD output and an 8K source when reframing to a sharp 4K video." } },
+      { "@type": "Question", "name": "Can I export vertical or square 360 photo videos?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Choose 9:16 Portrait for vertical video, 1:1 Square for square video, or 16:9 Landscape for widescreen video before exporting." } },
       { "@type": "Question", "name": "How do I change the rotation direction between two waypoints?", "acceptedAnswer": { "@type": "Answer", "text": "Select the destination waypoint and change its Pan value by one full turn. Subtract 360 degrees to force one direction or add 360 degrees to force the other. For example, 90 degrees and -270 degrees end at the same view but travel there in opposite directions. Reverse path swaps the whole waypoint order instead." } },
       { "@type": "Question", "name": "Can I use PanoPath as a 360 photo viewer?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Load a 2:1 equirectangular JPG, PNG or WebP and drag to look around the full panorama. Scroll to zoom, use the reset-view control to return to the starting direction, and enter fullscreen for an immersive browser-based 360 photo viewer. Exporting a video is optional." } }
     ]
@@ -198,10 +199,10 @@
 
       <div class="export-settings">
         <div class="section-label"><span>EXPORT</span><span class="quality-pill">FRAME-LOCKED</span></div>
-        <div class="segmented" id="aspectControl" aria-label="Aspect ratio">
-          <button type="button" data-aspect="16:9" class="active" disabled>16:9</button>
-          <button type="button" data-aspect="9:16" disabled>9:16</button>
-          <button type="button" data-aspect="1:1" disabled>1:1</button>
+        <div class="segmented" id="aspectControl" aria-label="Video aspect ratio">
+          <button type="button" data-aspect="16:9" class="active" aria-pressed="true" disabled><strong>16:9</strong><small>Landscape</small></button>
+          <button type="button" data-aspect="9:16" aria-pressed="false" disabled><strong>9:16</strong><small>Portrait</small></button>
+          <button type="button" data-aspect="1:1" aria-pressed="false" disabled><strong>1:1</strong><small>Square</small></button>
         </div>
         <div class="export-grid">
           <label>Resolution<select id="resolutionSelect" disabled><option value="1080">1080p</option><option value="1440">1440p</option><option value="2160">4K</option></select></label>
@@ -240,6 +241,7 @@
       <details><summary>Does PanoPath upload my panorama?</summary><p>No. Decoding, WebGL rendering and video encoding happen locally in your browser. Closing the page discards the photo.</p></details>
       <details><summary>How does PanoPath prevent stuttering?</summary><p>In browsers with WebCodecs, each output frame is rendered at its exact timeline position. The export may take longer on slower hardware, but the intended camera timing does not change.</p></details>
       <details><summary>What image resolution should I use?</summary><p>A 4096×2048 panorama is a good source for HD output. For a sharp 4K reframed video, use an 8K equirectangular source because the virtual camera sees only part of the sphere at once.</p></details>
+      <details><summary>Can I export vertical or square 360 photo videos?</summary><p>Yes. In Export, choose <strong>9:16 Portrait</strong> for vertical social video, <strong>1:1 Square</strong> for a square video, or <strong>16:9 Landscape</strong> for widescreen. The selected resolution is used as the shorter edge, so 1080p produces 1080×1920 portrait, 1080×1080 square, or 1920×1080 landscape video.</p></details>
       <details><summary>Which browsers provide the best export?</summary><p>Current Chrome and Edge releases provide the preferred frame-locked WebCodecs path. Other browsers use a real-time compatibility encoder when available.</p></details>
       <details><summary>How do I change the rotation direction between two waypoints?</summary><p>Select destination waypoint B and change its <strong>Pan</strong> value by one full turn. Subtract 360° to force one direction or add 360° to force the other. For example, 90° and −270° end at the same view, but the camera travels there in opposite directions. <strong>Reverse path</strong> is different: it swaps the entire waypoint sequence.</p></details>
       <details><summary>Can I use PanoPath as a free 360 photo viewer?</summary><p>Yes. Load a 2:1 equirectangular JPG, PNG or WebP, then drag to look around the complete panorama. Scroll to zoom, reset the view when needed, or enter fullscreen for a more immersive browser-based 360° panorama viewer. Exporting a video is entirely optional.</p></details>
