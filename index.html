@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b0d0c" />
-  <meta name="description" content="Convert a 360° panorama photo to a smooth video in your browser. Add pan, tilt, zoom and timed camera waypoints, then export up to 4K at 60 fps." />
+  <meta name="description" content="View a 360° panorama and convert it to a smooth video in your browser. Explore freely, add pan, tilt and zoom waypoints, then export up to 4K at 60 fps." />
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://panopath.prabalbanerjee.xyz/" />
   <meta property="og:site_name" content="PanoPath" />
   <meta property="og:title" content="360 Photo to Video Converter with Camera Waypoints" />
-  <meta property="og:description" content="Create smooth pan, tilt and zoom videos from equirectangular 360° photos. Private, browser-based and free to use." />
+  <meta property="og:description" content="View equirectangular 360° photos, then create smooth pan, tilt and zoom videos with camera waypoints. Private, browser-based and free." />
   <meta property="og:image" content="https://panopath.prabalbanerjee.xyz/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -25,7 +25,7 @@
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
   <link rel="manifest" href="/site.webmanifest" />
-  <title>360 Photo to Video Converter with Waypoints — PanoPath</title>
+  <title>360 Photo Viewer &amp; Video Converter with Waypoints — PanoPath</title>
   <link rel="stylesheet" href="styles.css" />
   <script type="application/ld+json">
   {
@@ -35,7 +35,7 @@
     "alternateName": "PanoPath 360 Photo Motion Studio",
     "url": "https://panopath.prabalbanerjee.xyz/",
     "image": "https://panopath.prabalbanerjee.xyz/og-image.png",
-    "description": "A private in-browser editor that converts equirectangular 360 degree photos into smooth conventional videos using timed pan, tilt, zoom and camera waypoints.",
+    "description": "A private in-browser 360 photo viewer and editor that converts equirectangular panoramas into smooth conventional videos using timed pan, tilt, zoom and camera waypoints.",
     "applicationCategory": "MultimediaApplication",
     "applicationSubCategory": "Video editor",
     "operatingSystem": "Any operating system with a modern web browser",
@@ -46,6 +46,7 @@
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "featureList": [
       "360 photo to video conversion",
+      "Interactive 360 panorama photo viewing",
       "Pan, tilt and zoom camera waypoints",
       "Frame-locked VP9 WebM export",
       "Up to 4K resolution and 60 frames per second",
@@ -79,7 +80,8 @@
       { "@type": "Question", "name": "Does PanoPath upload my 360 photo?", "acceptedAnswer": { "@type": "Answer", "text": "No. The panorama is decoded, rendered and encoded locally by your web browser. It is not uploaded to a server." } },
       { "@type": "Question", "name": "Why is the exported camera motion smooth?", "acceptedAnswer": { "@type": "Answer", "text": "On browsers with WebCodecs, every output frame is rendered at its exact timeline position before encoding. Slow hardware can increase export time without changing the camera timing." } },
       { "@type": "Question", "name": "What 360 photo format works best?", "acceptedAnswer": { "@type": "Answer", "text": "A 2:1 equirectangular JPG, PNG or WebP works best. Use a 4096 by 2048 source for HD output and an 8K source when reframing to a sharp 4K video." } },
-      { "@type": "Question", "name": "How do I change the rotation direction between two waypoints?", "acceptedAnswer": { "@type": "Answer", "text": "Select the destination waypoint and change its Pan value by one full turn. Subtract 360 degrees to force one direction or add 360 degrees to force the other. For example, 90 degrees and -270 degrees end at the same view but travel there in opposite directions. Reverse path swaps the whole waypoint order instead." } }
+      { "@type": "Question", "name": "How do I change the rotation direction between two waypoints?", "acceptedAnswer": { "@type": "Answer", "text": "Select the destination waypoint and change its Pan value by one full turn. Subtract 360 degrees to force one direction or add 360 degrees to force the other. For example, 90 degrees and -270 degrees end at the same view but travel there in opposite directions. Reverse path swaps the whole waypoint order instead." } },
+      { "@type": "Question", "name": "Can I use PanoPath as a 360 photo viewer?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Load a 2:1 equirectangular JPG, PNG or WebP and drag to look around the full panorama. Scroll to zoom, use the reset-view control to return to the starting direction, and enter fullscreen for an immersive browser-based 360 photo viewer. Exporting a video is optional." } }
     ]
   }
   </script>
@@ -226,6 +228,7 @@
       <article><span>04</span><h3>Export a smooth video</h3><p>Render a frame-locked VP9 WebM in landscape, portrait or square format at up to 4K and 60 fps.</p></article>
     </div>
     <div class="feature-band">
+      <div><strong>Interactive 360 viewer</strong><p>Drag, zoom and enter fullscreen to explore a panorama without exporting.</p></div>
       <div><strong>Private by design</strong><p>No account, cloud render or photo upload.</p></div>
       <div><strong>Waypoint control</strong><p>Animate pan, tilt, field of view and timing.</p></div>
       <div><strong>Frame-locked export</strong><p>Timeline positions remain exact on slow hardware.</p></div>
@@ -239,6 +242,7 @@
       <details><summary>What image resolution should I use?</summary><p>A 4096×2048 panorama is a good source for HD output. For a sharp 4K reframed video, use an 8K equirectangular source because the virtual camera sees only part of the sphere at once.</p></details>
       <details><summary>Which browsers provide the best export?</summary><p>Current Chrome and Edge releases provide the preferred frame-locked WebCodecs path. Other browsers use a real-time compatibility encoder when available.</p></details>
       <details><summary>How do I change the rotation direction between two waypoints?</summary><p>Select destination waypoint B and change its <strong>Pan</strong> value by one full turn. Subtract 360° to force one direction or add 360° to force the other. For example, 90° and −270° end at the same view, but the camera travels there in opposite directions. <strong>Reverse path</strong> is different: it swaps the entire waypoint sequence.</p></details>
+      <details><summary>Can I use PanoPath as a free 360 photo viewer?</summary><p>Yes. Load a 2:1 equirectangular JPG, PNG or WebP, then drag to look around the complete panorama. Scroll to zoom, reset the view when needed, or enter fullscreen for a more immersive browser-based 360° panorama viewer. Exporting a video is entirely optional.</p></details>
     </div>
   </section>
 

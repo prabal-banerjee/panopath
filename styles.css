@@ -181,7 +181,7 @@ select { height: 31px; border: 1px solid #343a35; border-radius: 6px; color: #c9
 .answer-grid span { color: var(--lime); font: 11px/1 var(--sans); letter-spacing: .12em; }
 .answer-grid h3 { margin: 22px 0 10px; font: 400 22px/1.1 var(--serif); }
 .answer-grid p, .feature-band p { margin: 0; color: #7d857e; font-size: 11px; line-height: 1.6; }
-.feature-band { margin: 28px 0 100px; display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.feature-band { margin: 28px 0 100px; display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
 .feature-band div { border: 1px solid #2b302c; border-radius: 9px; padding: 20px; background: #141815; }
 .feature-band strong { display: block; color: #d9dfda; font-size: 12px; margin-bottom: 7px; }
 .faq { max-width: 850px; margin: 0 auto; }
@@ -216,6 +216,7 @@ select { height: 31px; border: 1px solid #343a35; border-radius: 6px; color: #c9
   .answer-grid { grid-template-columns: 1fr 1fr; }
   .answer-grid article:nth-child(3) { border-left: 0; border-top: 1px solid #313631; }
   .answer-grid article:nth-child(4) { border-top: 1px solid #313631; }
+  .feature-band { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 560px) {
   .topbar { padding: 0 12px; }

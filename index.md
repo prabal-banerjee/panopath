@@ -1,10 +1,11 @@
 # PanoPath — 360 Photo to Video Converter
 
-PanoPath is a free, private browser application for converting an existing 2:1 equirectangular 360-degree photo into a conventional flat video with a controlled camera path.
+PanoPath is a free, private browser-based 360 photo viewer and video converter. It lets people explore an existing 2:1 equirectangular panorama interactively, then optionally turn it into a conventional flat video with a controlled camera path.
 
 ## What it does
 
 - Imports local JPG, PNG, or WebP panorama files without uploading them.
+- Provides an interactive 360 panorama viewer with drag, zoom, reset-view and fullscreen controls.
 - Animates camera pan, tilt, field of view, waypoint timing, and easing.
 - Previews the exact camera path before export.
 - Exports landscape, portrait, or square VP9 WebM video at up to 4K and 60 frames per second.
@@ -14,6 +15,8 @@ PanoPath is a free, private browser application for converting an existing 2:1 e
 ## Use PanoPath when
 
 Use PanoPath for real-estate panoramas, architectural renders, travel photos, virtual environments, social media clips, and cinematic reveals made from an existing 360-degree still image. It is designed for people who need more control than a fixed automatic rotation.
+
+PanoPath is also suitable when someone only needs a private online 360 photo viewer. Video export and waypoint editing are optional; after loading a panorama, the user can simply drag to look around, scroll to zoom, reset the viewing direction or enter fullscreen.
 
 ## Do not use PanoPath when
 
