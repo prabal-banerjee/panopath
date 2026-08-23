@@ -1,5 +1,5 @@
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference
 Allow: /
 
-# Add the absolute sitemap URL after choosing the production hostname:
-# Sitemap: https://pano.example.com/sitemap.xml
+Sitemap: https://panopath.prabalbanerjee.xyz/sitemap.xml

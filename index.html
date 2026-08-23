@@ -7,13 +7,23 @@
   <meta name="description" content="Convert a 360° panorama photo to a smooth video in your browser. Add pan, tilt, zoom and timed camera waypoints, then export up to 4K at 60 fps." />
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://panopath.prabalbanerjee.xyz/" />
   <meta property="og:site_name" content="PanoPath" />
   <meta property="og:title" content="360 Photo to Video Converter with Camera Waypoints" />
   <meta property="og:description" content="Create smooth pan, tilt and zoom videos from equirectangular 360° photos. Private, browser-based and free to use." />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="https://panopath.prabalbanerjee.xyz/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PanoPath 360 photo to video waypoint editor" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="PanoPath — 360 Photo to Video Converter" />
   <meta name="twitter:description" content="Animate a 360° photo with precise camera waypoints and frame-locked video export." />
+  <meta name="twitter:image" content="https://panopath.prabalbanerjee.xyz/og-image.png" />
+  <link rel="canonical" href="https://panopath.prabalbanerjee.xyz/" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
   <link rel="manifest" href="/site.webmanifest" />
   <title>360 Photo to Video Converter with Waypoints — PanoPath</title>
   <link rel="stylesheet" href="styles.css" />
@@ -23,12 +33,16 @@
     "@type": "SoftwareApplication",
     "name": "PanoPath",
     "alternateName": "PanoPath 360 Photo Motion Studio",
+    "url": "https://panopath.prabalbanerjee.xyz/",
+    "image": "https://panopath.prabalbanerjee.xyz/og-image.png",
     "description": "A private in-browser editor that converts equirectangular 360 degree photos into smooth conventional videos using timed pan, tilt, zoom and camera waypoints.",
     "applicationCategory": "MultimediaApplication",
     "applicationSubCategory": "Video editor",
     "operatingSystem": "Any operating system with a modern web browser",
     "browserRequirements": "Requires JavaScript and WebGL 2. WebCodecs is recommended for frame-locked export.",
     "isAccessibleForFree": true,
+    "author": { "@type": "Person", "name": "Prabal Banerjee", "url": "https://prabalbanerjee.xyz/" },
+    "sameAs": "https://github.com/prabal-banerjee/panopath",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "featureList": [
       "360 photo to video conversion",
@@ -38,6 +52,22 @@
       "Local browser processing without photo uploads",
       "16:9, 9:16 and 1:1 output"
     ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PanoPath",
+    "alternateName": "PanoPath 360 Photo Motion Studio",
+    "url": "https://panopath.prabalbanerjee.xyz/",
+    "description": "A free browser-based 360 photo to video converter with camera waypoints.",
+    "creator": {
+      "@type": "Person",
+      "name": "Prabal Banerjee",
+      "url": "https://prabalbanerjee.xyz/",
+      "sameAs": ["https://github.com/prabal-banerjee", "https://x.com/prabalbanerjee"]
+    }
   }
   </script>
   <script type="application/ld+json">
@@ -209,6 +239,11 @@
       <details><summary>Which browsers provide the best export?</summary><p>Current Chrome and Edge releases provide the preferred frame-locked WebCodecs path. Other browsers use a real-time compatibility encoder when available.</p></details>
     </div>
   </section>
+
+  <footer class="site-footer">
+    <div><strong>PanoPath</strong><span>A free project by <a href="https://prabalbanerjee.xyz/" rel="author">Prabal Banerjee</a>.</span></div>
+    <nav aria-label="Project information"><a href="/about">About</a><a href="/privacy">Privacy</a><a href="/contact">Contact</a><a href="https://github.com/prabal-banerjee/panopath" rel="noopener">Source code</a></nav>
+  </footer>
 
   <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" hidden />
 

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><radialGradient id="g" cx="25%" cy="25%" r="85%"><stop stop-color="#24301c"/><stop offset="1" stop-color="#090b0a"/></radialGradient><pattern id="p" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity=".035"/></pattern></defs>
+  <rect width="1200" height="630" fill="url(#g)"/><rect width="1200" height="630" fill="url(#p)"/>
+  <g transform="translate(90 76)"><rect width="68" height="68" rx="17" fill="#c8f05a"/><circle cx="34" cy="34" r="23" fill="#10140d"/><ellipse cx="34" cy="34" rx="9" ry="23" fill="none" stroke="#c8f05a" stroke-width="3"/><ellipse cx="34" cy="34" rx="23" ry="9" fill="none" stroke="#c8f05a" stroke-width="3"/><circle cx="34" cy="34" r="3" fill="#c8f05a"/></g>
+  <text x="178" y="125" fill="#e9eee9" font-family="Arial, sans-serif" font-size="33" font-weight="700">PanoPath</text>
+  <text x="90" y="242" fill="#c8f05a" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="5">360 PHOTO TO VIDEO</text>
+  <text x="90" y="330" fill="#f1f4f1" font-family="Georgia, serif" font-size="74">Turn a still world</text>
+  <text x="90" y="414" fill="#f1f4f1" font-family="Georgia, serif" font-size="74">into a camera move.</text>
+  <text x="92" y="488" fill="#99a39b" font-family="Arial, sans-serif" font-size="25">Pan · tilt · zoom · timed waypoints · frame-locked export</text>
+  <rect x="90" y="540" width="260" height="4" rx="2" fill="#c8f05a"/>
+</svg>

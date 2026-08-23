@@ -19,14 +19,10 @@ On browsers with WebCodecs, export is offline and frame-locked: every video fram
 
 For best quality, start with a 4096×2048 or larger equirectangular image. A 4K *reframed* export benefits from an 8K source panorama because the output camera sees only part of the sphere at once.
 
-## Production hostname checklist
+## Production deployment
 
-After choosing the final subdomain:
+The canonical deployment is [panopath.prabalbanerjee.xyz](https://panopath.prabalbanerjee.xyz/). The `main` branch deploys through Cloudflare Pages with no build command and the repository root (`.`) as its output directory.
 
-1. Add a static canonical `<link>` plus `og:url` to `index.html`.
-2. Add the production URL to both JSON-LD objects in `index.html`.
-3. Copy `sitemap.template.xml` to `sitemap.xml` and replace the placeholder hostname.
-4. Add the absolute sitemap URL to `robots.txt`.
-5. Submit the sitemap in Google Search Console and Bing Webmaster Tools.
+The Pages `_worker.js` provides `Accept: text/markdown` content negotiation and agent-friendly Markdown 404 responses. Static application assets remain in the Pages asset binding. SEO and agent discovery resources include `sitemap.xml`, `robots.txt`, `llms.txt`, `index.md`, JSON-LD, visible FAQ content, and About, Privacy, and Contact trust pages.
 
-Do not deploy `sitemap.template.xml` as `sitemap.xml` without replacing its placeholder.
+After material public changes, update the sitemap `lastmod` date, push to `main`, and verify the live deployment before requesting a recrawl through Google Search Console and Bing Webmaster Tools.
