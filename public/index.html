@@ -26,7 +26,7 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
   <link rel="manifest" href="/site.webmanifest" />
   <title>360 Photo Viewer &amp; Video Converter with Waypoints — PanoPath</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -108,7 +108,8 @@
 
   <main class="app-shell">
     <section class="workspace" aria-label="Panorama preview">
-      <div class="viewer" id="viewer">
+      <div class="viewer-stage" id="viewerStage">
+        <div class="viewer" id="viewer" data-aspect="16:9">
         <canvas id="glCanvas"></canvas>
 
         <div class="empty-state" id="emptyState">
@@ -141,6 +142,7 @@
               <svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M8 21H3v-5m13 5h5v-5"/></svg>
             </button>
           </div>
+        </div>
         </div>
       </div>
 
@@ -269,6 +271,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <noscript><p class="noscript">PanoPath needs JavaScript to render and encode your 360° photo locally.</p></noscript>
-  <script src="app.js"></script>
+  <script src="/assets/js/app.js"></script>
 </body>
 </html>

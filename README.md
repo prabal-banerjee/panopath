@@ -4,11 +4,11 @@ A dependency-free, client-side editor for turning an equirectangular 360° photo
 
 ## Run it
 
-Serve this directory with any static web server (modules and a build step are not required):
+Serve the `public` directory with any static web server (modules and a build step are not required):
 
 ```bash
 cd panorama-motion-studio
-python3 -m http.server 4173
+python3 -m http.server 4173 --directory public
 ```
 
 Then open `http://localhost:4173` in Chrome or Edge. The demo panorama is generated locally; uploaded photos never leave the browser.
@@ -21,8 +21,26 @@ For best quality, start with a 4096×2048 or larger equirectangular image. A 4K 
 
 ## Production deployment
 
-The canonical deployment is [panopath.prabalbanerjee.xyz](https://panopath.prabalbanerjee.xyz/). The `main` branch deploys through Cloudflare Pages with no build command and the repository root (`.`) as its output directory.
+The canonical deployment is [panopath.prabalbanerjee.xyz](https://panopath.prabalbanerjee.xyz/). The `main` branch deploys automatically through Cloudflare Workers Builds using `wrangler.jsonc`.
 
-The Pages `_worker.js` provides `Accept: text/markdown` content negotiation and agent-friendly Markdown 404 responses. Static application assets remain in the Pages asset binding. SEO and agent discovery resources include `sitemap.xml`, `robots.txt`, `llms.txt`, `index.md`, JSON-LD, visible FAQ content, and About, Privacy, and Contact trust pages.
+The `src/worker.js` entry point provides security headers, `Accept: text/markdown` content negotiation, and agent-friendly Markdown 404 responses. Browser assets and crawler resources live in `public/`; Cloudflare exposes that directory through the `ASSETS` binding.
+
+## Repository layout
+
+```text
+public/             Static site and crawler-facing files
+  assets/css/       Browser styles
+  assets/js/        Browser application code
+src/worker.js       Cloudflare Worker request handling
+config/             Maintenance templates not deployed publicly
+tests/              Browser smoke tests
+wrangler.jsonc      Cloudflare build and asset configuration
+```
+
+Run the aspect-ratio browser smoke test while the local server is listening on port 4173:
+
+```bash
+python3 tests/aspect_ratio_ui.py
+```
 
 After material public changes, update the sitemap `lastmod` date, push to `main`, and verify the live deployment before requesting a recrawl through Google Search Console and Bing Webmaster Tools.

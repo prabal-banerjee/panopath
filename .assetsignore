@@ -1,9 +1,0 @@
-_worker.js
-_headers
-wrangler.jsonc
-.assetsignore
-.git
-.github
-.gitignore
-README.md
-sitemap.template.xml

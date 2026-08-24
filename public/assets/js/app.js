@@ -6,7 +6,7 @@
   const TAU = Math.PI * 2;
 
   const elements = {
-    canvas: $('#glCanvas'), viewer: $('#viewer'), empty: $('#emptyState'), file: $('#fileInput'),
+    canvas: $('#glCanvas'), viewer: $('#viewer'), stage: $('#viewerStage'), empty: $('#emptyState'), file: $('#fileInput'),
     choose: $('#chooseButton'), demo: $('#demoButton'), drop: $('#dropOverlay'), hud: $('#viewerHud'),
     transport: $('#transport'), play: $('#playButton'), start: $('#jumpStartButton'), scrubber: $('#scrubber'),
     fill: $('#timelineFill'), markers: $('#waypointMarkers'), currentTime: $('#currentTime'), totalTime: $('#totalTime'),
@@ -96,6 +96,7 @@
 
   const clamp = (n,a,b) => Math.max(a,Math.min(b,n));
   const formatTime = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}.${Math.floor((s%1)*10)}`;
+  const aspectValue = aspect => { const [width,height]=aspect.split(':').map(Number); return width/height; };
   const easing = {
     linear: t => t,
     smooth: t => t*t*(3-2*t),
@@ -113,6 +114,18 @@
     return { yaw:a.yaw+(b.yaw-a.yaw)*e, pitch:a.pitch+(b.pitch-a.pitch)*e, fov:a.fov+(b.fov-a.fov)*e };
   }
   function pickView(w) { return {yaw:w.yaw,pitch:w.pitch,fov:w.fov}; }
+  function fitViewer() {
+    elements.viewer.dataset.aspect=state.aspect;
+    if(document.fullscreenElement===elements.viewer)return;
+    const stageStyle=getComputedStyle(elements.stage);
+    const availableWidth=Math.max(1,elements.stage.clientWidth-parseFloat(stageStyle.paddingLeft)-parseFloat(stageStyle.paddingRight));
+    const availableHeight=Math.max(1,elements.stage.clientHeight-parseFloat(stageStyle.paddingTop)-parseFloat(stageStyle.paddingBottom));
+    const ratio=aspectValue(state.aspect);
+    let width=availableWidth,height=width/ratio;
+    if(height>availableHeight){height=availableHeight;width=height*ratio;}
+    elements.viewer.style.width=`${Math.floor(width)}px`;
+    elements.viewer.style.height=`${Math.floor(height)}px`;
+  }
   function setView(view, render=true) {
     state.view={yaw:view.yaw,pitch:clamp(view.pitch,-88,88),fov:clamp(view.fov,30,110)};
     elements.yaw.textContent=`${Math.round((((state.view.yaw+180)%360)+360)%360-180)}°`;
@@ -210,8 +223,8 @@
     elements.newProject.onclick=()=>location.reload(); elements.export.onclick=startExport;elements.exportTop.onclick=startExport;
     elements.closeDialog.onclick=closeExportDialog;elements.cancelExport.onclick=()=>{state.cancelExport=true;if(!state.exporting)closeExportDialog();};
     elements.resolution.onchange=updateEstimate;elements.fps.onchange=updateEstimate;elements.blur.onchange=updateEstimate;
-    $$('#aspectControl button').forEach(b=>b.onclick=()=>{$$('#aspectControl button').forEach(x=>{const active=x===b;x.classList.toggle('active',active);x.setAttribute('aria-pressed',String(active));});state.aspect=b.dataset.aspect;updateEstimate();});
-    window.addEventListener('resize',()=>{if(state.loaded&&!state.exporting){renderer.resizeToDisplay();renderer.render(state.view);}});
+    $$('#aspectControl button').forEach(b=>b.onclick=()=>{$$('#aspectControl button').forEach(x=>{const active=x===b;x.classList.toggle('active',active);x.setAttribute('aria-pressed',String(active));});state.aspect=b.dataset.aspect;fitViewer();updateEstimate();});
+    document.addEventListener('fullscreenchange',()=>{if(document.fullscreenElement!==elements.viewer)fitViewer();});
   }
 
   function dimensions(){const p=Number(elements.resolution.value),a=state.aspect;if(a==='16:9')return [Math.round(p*16/9),p];if(a==='9:16')return [p,Math.round(p*16/9)];return[p,p];}
@@ -292,5 +305,7 @@
   let toastTimer;function toast(message){elements.toast.textContent=message;elements.toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>elements.toast.classList.remove('show'),3300);}
 
   bindUI();
-  const ro=new ResizeObserver(()=>{if(renderer&&!state.exporting){renderer.resizeToDisplay();if(state.loaded)renderer.render(state.view);}});ro.observe(elements.viewer);
+  fitViewer();
+  const stageObserver=new ResizeObserver(fitViewer);stageObserver.observe(elements.stage);
+  const viewerObserver=new ResizeObserver(()=>{if(renderer&&!state.exporting){renderer.resizeToDisplay();if(state.loaded)renderer.render(state.view);}});viewerObserver.observe(elements.viewer);
 })();
