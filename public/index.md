@@ -38,7 +38,7 @@ To make the camera travel the opposite way between waypoint A and waypoint B, se
 
 ## Privacy and ownership
 
-All image decoding, WebGL rendering and video encoding happen locally in the browser. PanoPath does not provide an upload endpoint, user account, analytics tracker, or cloud media store. Closing the page discards the imported image. PanoPath is an open-source project by [Prabal Banerjee](https://prabalbanerjee.xyz/); its source is available on [GitHub](https://github.com/prabal-banerjee/panopath).
+All image decoding, WebGL rendering and video encoding happen locally in the browser. PanoPath does not provide an upload endpoint, user account, or cloud media store. It uses Google Analytics to count visits and completed editing steps; the panorama and exported video never leave the browser. Closing the page discards the imported image. PanoPath is an open-source project by [Prabal Banerjee](https://prabalbanerjee.xyz/); its source is available on [GitHub](https://github.com/prabal-banerjee/panopath).
 
 ## Site index
 

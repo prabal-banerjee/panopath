@@ -5,6 +5,8 @@
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const TAU = Math.PI * 2;
 
+  const track = (name, params) => { if (window.gtag) window.gtag('event', name, params || {}); };
+
   const elements = {
     canvas: $('#glCanvas'), viewer: $('#viewer'), stage: $('#viewerStage'), empty: $('#emptyState'), file: $('#fileInput'),
     choose: $('#chooseButton'), demo: $('#demoButton'), drop: $('#dropOverlay'), hud: $('#viewerHud'),
@@ -158,6 +160,7 @@
   async function loadBitmap(bitmap,name) {
     state.imageWidth=bitmap.width; state.imageHeight=bitmap.height; state.imageName=name; renderer.load(bitmap); enableEditor();
     $('.project-name').textContent=name.replace(/\.[^.]+$/,''); elements.resolutionBadge.textContent=`${bitmap.width} × ${bitmap.height} · LOCAL`;
+    track('pano_loaded',{image_width:bitmap.width,image_height:bitmap.height,aspect:Number((bitmap.width/bitmap.height).toFixed(2))});
     state.waypoints=[
       {time:0,yaw:0,pitch:0,fov:76,ease:'smooth'},
       {time:state.duration*.5,yaw:80,pitch:-5,fov:64,ease:'smooth'},
@@ -183,6 +186,7 @@
     if(state.waypoints.some(w=>Math.abs(w.time-time)<.08)) time=clamp(time+.25,0,state.duration);
     state.waypoints.push({time,yaw:state.view.yaw,pitch:state.view.pitch,fov:state.view.fov,ease:elements.globalEase.value});
     state.waypoints.sort((a,b)=>a.time-b.time); state.selected=state.waypoints.findIndex(w=>w.time===time); renderWaypoints();renderMarkers();toast('Waypoint captured');
+    track('waypoint_added',{waypoint_count:state.waypoints.length});
   }
 
   function renderWaypoints() {
@@ -237,10 +241,13 @@
     state.exporting=true;state.cancelExport=false;elements.download.classList.add('hidden');elements.cancelExport.classList.remove('hidden');elements.closeDialog.disabled=true;elements.dialogTitle.textContent='Rendering your path';elements.progress.style.width='0%';elements.percent.textContent='0%';elements.dialog.showModal();
     const [width,height]=dimensions(),fps=Number(elements.fps.value),frames=Math.ceil(state.duration*fps),old=[renderer.canvas.width,renderer.canvas.height];
     const preview=elements.exportPreview,px=preview.getContext('2d');preview.width=Math.min(width,960);preview.height=Math.round(preview.width*height/width);renderer.resize(width,height);
+    const encoderKind=('VideoEncoder' in window && 'VideoFrame' in window)?'webcodecs':'mediarecorder';
+    state.exportStartedAt=Date.now();
+    track('export_started',{width,height,fps,encoder:encoderKind,waypoint_count:state.waypoints.length,duration_seconds:state.duration});
     try{
-      if('VideoEncoder' in window && 'VideoFrame' in window) await exportWebCodecs(width,height,fps,frames,px);
+      if(encoderKind==='webcodecs') await exportWebCodecs(width,height,fps,frames,px);
       else await exportMediaRecorder(width,height,fps,frames,px);
-    }catch(error){if(!state.cancelExport){elements.exportStatus.textContent='Export failed';elements.renderNote.textContent=error.message||'The encoder stopped unexpectedly.';toast('Export failed. Try 1080p or 30 fps.');}}
+    }catch(error){if(!state.cancelExport){track('export_failed',{width,height,fps,encoder:encoderKind,reason:(error&&error.message)?String(error.message).slice(0,100):'unknown'});elements.exportStatus.textContent='Export failed';elements.renderNote.textContent=error.message||'The encoder stopped unexpectedly.';toast('Export failed. Try 1080p or 30 fps.');}}
     finally{renderer.resize(old[0],old[1]);renderer.render(state.view);state.exporting=false;elements.closeDialog.disabled=false;}
   }
 
@@ -281,7 +288,8 @@
   }
 
   function updateExportProgress(done,total,label){const p=Math.round(done/total*100);elements.progress.style.width=`${p}%`;elements.percent.textContent=`${p}%`;elements.renderFrame.textContent=label;}
-  function finishExport(blob,name,note){state.exportUrl=URL.createObjectURL(blob);elements.download.href=state.exportUrl;elements.download.download=name;elements.download.textContent=`Download video · ${formatBytes(blob.size)}`;elements.download.classList.remove('hidden');elements.cancelExport.classList.add('hidden');elements.dialogTitle.textContent='Your video is ready';elements.exportStatus.textContent=note;elements.renderNote.textContent='The file was created locally. It has not been uploaded or stored anywhere.';elements.progress.style.width='100%';elements.percent.textContent='100%';elements.renderFrame.textContent='Render complete';}
+  function finishExport(blob,name,note){state.exportUrl=URL.createObjectURL(blob);elements.download.href=state.exportUrl;elements.download.download=name;elements.download.textContent=`Download video · ${formatBytes(blob.size)}`;elements.download.classList.remove('hidden');elements.cancelExport.classList.add('hidden');elements.dialogTitle.textContent='Your video is ready';elements.exportStatus.textContent=note;elements.renderNote.textContent='The file was created locally. It has not been uploaded or stored anywhere.';elements.progress.style.width='100%';elements.percent.textContent='100%';elements.renderFrame.textContent='Render complete';
+    track('export_completed',{file_bytes:blob.size,render_seconds:state.exportStartedAt?Math.round((Date.now()-state.exportStartedAt)/1000):undefined,waypoint_count:state.waypoints.length});}
   function closeExportDialog(){if(state.exporting)return;elements.dialog.close();}
   const nextPaint=()=>new Promise(r=>requestAnimationFrame(()=>r()));
   const formatBytes=n=>n>1048576?`${(n/1048576).toFixed(1)} MB`:`${Math.round(n/1024)} KB`;
